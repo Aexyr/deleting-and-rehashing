@@ -160,30 +160,7 @@ int HashTable::operator[](int index) const
 
 void HashTable::rehash(int newCap)
 {
-	while (!isPrime(newCap))
-		++newCap;
-
-	if (newCap > numOfElements && newCap != capacity)
-	{
-		HashTable oldTable(*this);
-		int index = 0;
-
-		delete[] table;
-		capacity = newCap;
-		table = new int[capacity];
-		numOfElements = 0;
-		for (int i = 0; i < newCap; ++i) 
-			table[i] = -1;
-
-		while (numOfElements != oldTable.numOfElements) 
-		{
-			if (oldTable[index] != -1 && oldTable[index] != -2)
-			{
-				insert(oldTable[index]);
-			}
-			++index;
-		}
-	}
+	// Completely wrong!@#@$%
 }
 
 HashTable::~HashTable()
