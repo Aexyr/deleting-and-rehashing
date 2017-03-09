@@ -103,25 +103,32 @@ bool HashTable::search(int key) const
 	return false;
 }
 
-bool HashTable::deleteItem(int key)
+void HashTable::deleteItem(int key)
 {
 	if (numOfElements != 0) {
 		int index = hashValue(key), counter = 0;
-		while (counter < capacity && table[index] != -1)
+		bool isDeleted = false;
+		while (!isDeleted && counter < capacity && table[index] != -1)
 		{
 			if (table[index] == key) 
 			{
 				table[index] = -2;
 				--numOfElements;
-				return true;
+				isDeleted = true;
 			}
 
 			index = (index == (capacity - 1)) ? 0 : index + 1;
 			++counter;
 		}
+		if (isDeleted)
+			cout << key << " has been successfully deleted in the hash table!" << endl;
+		else
+			cout << "There is no existing " << key << " in the hash table." << endl;
 	}
-
-	return false;
+	else
+	{
+		cerr << "Error: Hash table is empty." << endl;
+	}
 }
 
 int HashTable::getCapacity() const
@@ -158,7 +165,8 @@ int HashTable::operator[](int index) const
 
 HashTable::~HashTable()
 {
-	if (table != nullptr) {
+	if (table != nullptr) 
+	{
 		delete[] table;
 		table = NULL;
 	}
