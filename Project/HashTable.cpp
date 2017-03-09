@@ -3,7 +3,7 @@ Fazeli, Bijan
 Lauguico, Marco
 
 CS A200
-March 6, 2017
+March 9, 2017
 
 Lab 6: HT Linear Probing (With ReHash and Delete)
 */
@@ -67,24 +67,22 @@ HashTable::HashTable(const HashTable & otherHash)
 
 void HashTable::insert(int key)
 {
-	if (numOfElements == capacity)
-		cout << "Table is already full!!!" << endl;
-	else
-	{
-		int index = hashValue(key);
-		bool added = false;
+	if (numOfElements >= (int)(capacity * 0.7)) //If numOfElem is >= 70% of capacity, do rehash.
+		this->rehash();
+	
+	int index = hashValue(key);
+	bool added = false;
 
-		while (!added)
+	while (!added)
+	{
+		if (table[index] == -1 || table[index] == -2)
 		{
-			if (table[index] == -1 || table[index] == -2)
-			{
-				table[index] = key;
-				++numOfElements;
-				added = true;
-			}
-			else
-				index = (index == (capacity - 1)) ? 0 : index + 1;
+			table[index] = key;
+			++numOfElements;
+			added = true;
 		}
+		else
+			index = (index == (capacity - 1)) ? 0 : index + 1;
 	}
 }
 
@@ -142,7 +140,7 @@ HashTable HashTable::operator=(const HashTable & otherHash)
 			table = new int[otherHash.capacity];
 		}
 
-		for (int i = 0; i < otherHash.numOfElements; ++i)
+		for (int i = 0; i < otherHash.capacity; ++i)
 			table[i] = otherHash.table[i];
 
 		numOfElements = otherHash.numOfElements;
@@ -156,11 +154,6 @@ HashTable HashTable::operator=(const HashTable & otherHash)
 int HashTable::operator[](int index) const
 {
 	return table[index];
-}
-
-void HashTable::rehash(int newCap)
-{
-	// Completely wrong!@#@$%
 }
 
 HashTable::~HashTable()
@@ -187,4 +180,36 @@ bool HashTable::isPrime(int number) const
 	}
 
 	return true;
+}
+
+void HashTable::rehash()
+{
+	int newCap = capacity * 2;
+	while (!isPrime(newCap))
+		++newCap;
+
+	if (newCap != capacity)
+	{
+		HashTable oldTable(*this);
+		delete[] table; 
+		capacity = newCap;
+		numOfElements = 0;
+		table = new int[newCap];
+
+		for (int i = 0; i < newCap; ++i)
+			table[i] = -1;
+
+		if (oldTable.numOfElements != 0)
+		{
+			int index = 0;
+			while (numOfElements != oldTable.numOfElements) // This will make sure that it wont run unnessesary loop.
+			{
+				if (oldTable[index] != -1 && oldTable[index] != -2)
+				{
+					insert(oldTable[index]);
+				}
+				++index;
+			}
+		}
+	}
 }
