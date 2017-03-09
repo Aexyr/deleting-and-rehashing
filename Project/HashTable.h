@@ -66,8 +66,8 @@ public:
 	The function will call the function hashValue to find
 	the index where the key should be inserted and insert the key.
 	The function uses linear probing to handle collisions.
-	If the table is full, the function outputs the error message,
-	"Table is full. Cannot insert."
+	If the numOfElements is greater than or equals 70% of the capacity
+	the hash table will rehash.
 
 	Parameter: a key to insert into the hash table
 	*/
@@ -122,16 +122,6 @@ public:
 	int operator[](int index) const;
 
 	/*
-	rehash
-	The function resizes the capacity of the hash table
-	and re-inserts all the elements in the previous hash table
-	to the new resized hash table.
-
-	Parameter: new capacity
-	*/
-	void rehash(int newCap);
-
-	/*
 	Destructor
 	The function deletes the dynamic table from memory and resets
 	the pointer to NULL.
@@ -158,6 +148,15 @@ private:
 	Parameter: number
 	*/
 	bool isPrime(int number) const;
+	
+	/*
+	rehash
+	The function doubles the capacity of the hash table
+	and re-inserts all the elements in the previous hash table
+	to the doubled capacity hash table.
+
+	*/
+	void rehash();
 	int *table;				//pointer to the hash table
 	int numOfElements;		//number of items in the hash table
 	int capacity;			//maximum length of the hash table	
