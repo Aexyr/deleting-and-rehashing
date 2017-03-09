@@ -90,11 +90,11 @@ public:
 
 	/*
 	Function deleteItem
-	The function returns true if the item has been deleted, and false otherwise.
+	The function deletes the key in the hash table.
 
 	Parameter: the key to delete
 	*/
-	bool deleteItem(int key);
+	void deleteItem(int key);
 
 	/*
 	Function getCapacity
