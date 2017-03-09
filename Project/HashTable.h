@@ -66,7 +66,7 @@ public:
 	The function will call the function hashValue to find
 	the index where the key should be inserted and insert the key.
 	The function uses linear probing to handle collisions.
-	If the numOfElements is greater than or equals 70% of the capacity
+	If the numOfElements is greater than or equals 50% of the capacity
 	the hash table will rehash.
 
 	Parameter: a key to insert into the hash table
