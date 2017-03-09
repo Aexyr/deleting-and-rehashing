@@ -67,8 +67,8 @@ HashTable::HashTable(const HashTable & otherHash)
 
 void HashTable::insert(int key)
 {
-	if (numOfElements >= (int)(capacity * 0.7)) //If numOfElem is >= 70% of capacity, do rehash.
-		this->rehash();
+	if (numOfElements >= static_cast<int>(capacity * 0.5)) //If numOfElem is >= 50% of capacity, do rehash.
+		rehash();
 	
 	int index = hashValue(key);
 	bool added = false;
@@ -179,12 +179,18 @@ int HashTable::hashValue(int key) const
 
 bool HashTable::isPrime(int number) const
 {
-	for (int i = 2; i <= number / 2; ++i)
+	if ((number % 2 == 0) || (number % 3 == 0))
+		return false;
+
+	int i = 5, w = 2;
+
+	while (i * i <= number)
 	{
 		if (number % i == 0)
-		{
 			return false;
-		}
+
+		i += w;
+		w = 6 - w;
 	}
 
 	return true;
@@ -196,28 +202,25 @@ void HashTable::rehash()
 	while (!isPrime(newCap))
 		++newCap;
 
-	if (newCap != capacity)
+	HashTable oldTable(*this);
+	delete[] table;
+	capacity = newCap;
+	numOfElements = 0;
+	table = new int[newCap];
+
+	for (int i = 0; i < newCap; ++i)
+		table[i] = -1;
+
+	if (oldTable.numOfElements != 0)
 	{
-		HashTable oldTable(*this);
-		delete[] table; 
-		capacity = newCap;
-		numOfElements = 0;
-		table = new int[newCap];
-
-		for (int i = 0; i < newCap; ++i)
-			table[i] = -1;
-
-		if (oldTable.numOfElements != 0)
+		int index = 0;
+		while (numOfElements != oldTable.numOfElements)
 		{
-			int index = 0;
-			while (numOfElements != oldTable.numOfElements) // This will make sure that it wont run unnecessary loop.
+			if (oldTable[index] != -1 && oldTable[index] != -2)
 			{
-				if (oldTable[index] != -1 && oldTable[index] != -2)
-				{
-					insert(oldTable[index]);
-				}
-				++index;
+				insert(oldTable[index]);
 			}
+			++index;
 		}
 	}
 }
