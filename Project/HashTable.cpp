@@ -202,7 +202,7 @@ void HashTable::rehash()
 		if (oldTable.numOfElements != 0)
 		{
 			int index = 0;
-			while (numOfElements != oldTable.numOfElements) // This will make sure that it wont run unnessesary loop.
+			while (numOfElements != oldTable.numOfElements) // This will make sure that it wont run unnecessary loop.
 			{
 				if (oldTable[index] != -1 && oldTable[index] != -2)
 				{
