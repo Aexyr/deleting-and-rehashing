@@ -10,6 +10,7 @@ Lab 6: HT Linear Probing (With ReHash and Delete)
 
 #include "HashTable.h"
 
+// Overloading insertion operator 
 ostream & operator << (ostream & out, const HashTable & hash)
 {
 	int temp;
